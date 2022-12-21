@@ -2,7 +2,11 @@
 
 ### 1. About
 
-This is a C++ Houdini SOP implementing [phong deformation](https://graphics.pixar.com/library/PhongDefo/paper.pdf). 
+This is a C++ Houdini SOP implementing [phong deformation](https://graphics.pixar.com/library/PhongDefo/paper.pdf).
+
+![screenshot](twist.png)
+
+The method gives smoother, more accurate deformation compared to standard linear deformation when using tetrahedral meshes to drive high detail embedded geometry. 
 
 ### 2. Installation
 
