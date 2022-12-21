@@ -6,7 +6,7 @@ This is a C++ Houdini SOP implementing [phong deformation](https://graphics.pixa
 
 ![screenshot](twist.png)
 
-The method gives smoother, more accurate deformation compared to standard linear deformation when using tetrahedral meshes to drive high detail embedded geometry. 
+Under extreme deformation, the method gives noticeably smoother, more accurate results compared to standard linear deformation, and also houdini's builtin point deform node, which can require tweaking radius/samples to achieve smoothness while being prone to pushing geometry outside the deformed cage. Generally useful when using tetrahedral meshes to drive high detail embedded geometry. 
 
 ### 2. Installation
 
