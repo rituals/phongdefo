@@ -36,17 +36,17 @@ newSopOperator(OP_OperatorTable *table)
         inputLabels));
 }
 
-static PRM_Name radiusName("searchradius", "Search radius");
-static PRM_Default radiusDefault(0.2f);
-static PRM_Range radiusRange(PRM_RANGE_UI, 0.1f, PRM_RANGE_UI, 10.0f);
-
-static PRM_Name enablePhongName(
-    "enablephongdeformation", "Phong Deformation");
+static PRM_Name modeName("mode", "Deformation Mode");
+static PRM_Name modeChoices[] = {
+    PRM_Name("linear", "Linear"),
+    PRM_Name("phong", "Phong"),
+    PRM_Name(0)
+};
+static PRM_ChoiceList modeMenu(PRM_CHOICELIST_SINGLE, modeChoices);
 
 PRM_Template
 SOP_TetEmbeddedDeform::myTemplateList[] = {
-    PRM_Template(PRM_FLT_J, 1, &radiusName, &radiusDefault, 0, &radiusRange),
-    PRM_Template(PRM_TOGGLE, 1, &enablePhongName),
+    PRM_Template(PRM_STRING, 1, &modeName, 0, &modeMenu),
     PRM_Template()
 };
 
@@ -95,8 +95,9 @@ SOP_TetEmbeddedDeform::cookMySop(OP_Context &context)
 
     _tracker->update(detail, restTetMeshDetail, deformedTetMeshDetail);
 
-    //float now = context.getTime(); 
-    //const bool phong = evalInt("enablephongdeformation", 0, now); 
+    UT_String modeString;
+    evalString(modeString, "mode", 0, context.getTime()); 
+    bool doPhong = modeString == "phong";
 
     duplicatePointSource(0, context);
     GA_RWHandleV3 pointsAttrHandle(gdp->getP());
@@ -104,12 +105,11 @@ SOP_TetEmbeddedDeform::cookMySop(OP_Context &context)
     for (GA_Size i = 0; i < gdp->getNumPoints(); ++i) {
         const GA_Offset offset = gdp->pointOffset(i);
         UT_Vector3 point = pointsAttrHandle.get(offset);
-        //if (phong) {
-            //_tracker->applyPhongDeformation(&point, i);
-        //} else {
-        //    _tracker->applyLinearDeformation(&point, i);
-        //}
-        point = _tracker->applyPhongDeformation(point, i);
+        if (doPhong) {
+            point = _tracker->applyPhongDeformation(point, i);
+        } else {
+            point = _tracker->applyLinearDeformation(point, i);
+        }
         pointsAttrHandle.set(offset, point);
     }
 
