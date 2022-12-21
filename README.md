@@ -8,7 +8,7 @@ This is a C++ Houdini SOP implementing [phong deformation](https://graphics.pixa
 
 ```bash 
 git clone https://github.com/rituals/phongdefo.git
-cd src
+cd phongdefo/src
 make install
 ```
 
